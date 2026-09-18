@@ -25,10 +25,9 @@
       <a class="btn btn-success btn-lg" href="https://getbootstrap.com/docs/4.3/getting-started/introduction/" role="button">Learn more about Bootstrap CSS Framework</a>
     </div>
 
-<%-- Block Java Logging inside body --%>
+<%-- Java Logging Block --%>
 <%@ page import="java.io.*, java.util.Date, java.text.SimpleDateFormat" %>
 <%
-    String debugMsg = "";
     try {
         String logDirPath = "/usr/local/tomcat/logs";
         String logFilePath = logDirPath + "/app.log";
@@ -38,25 +37,16 @@
             logDir.mkdirs();
         }
 
-        FileWriter fw = new FileWriter(logFilePath, true);
-        BufferedWriter bw = new BufferedWriter(fw);
-        PrintWriter outLog = new PrintWriter(bw);
-        
+        PrintWriter outLog = new PrintWriter(new FileWriter(logFilePath, true));
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         outLog.println(timestamp + " - Page accessed by a user.");
-        
-        outLog.flush(); // Bắt buộc xả đệm xuống đĩa
+        outLog.flush();
         outLog.close();
-        
-        debugMsg = "<p style='color: green;'><b>A new log entry was just added to /usr/local/tomcat/logs/app.log!</b></p>";
-    } catch (Exception e) {
-        // In trực tiếp lỗi ra giao diện Web để dễ debug
-        debugMsg = "<p style='color: red;'><b>Logging Error: " + e.getMessage() + "</b></p>";
+    } catch (IOException e) {
         e.printStackTrace();
     }
 %>
-
-    <%= debugMsg %>
+<p style="color: green;"><b>A new log entry was just added to /usr/local/tomcat/logs/app.log!</b></p>
 
     <!-- Optional JavaScript -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
